@@ -3,6 +3,7 @@ package cl.duoc.barriodigital.audit.repository;
 import cl.duoc.barriodigital.audit.entity.AuditEvent;
 import org.springframework.data.jpa.repository.JpaRepository;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 public interface AuditEventRepository extends JpaRepository<AuditEvent, Long> {
@@ -14,4 +15,9 @@ public interface AuditEventRepository extends JpaRepository<AuditEvent, Long> {
     List<AuditEvent> findByUserIdOrderByEventTimestampDesc(String userId);
 
     List<AuditEvent> findByEventTypeOrderByEventTimestampDesc(String eventType);
+
+    List<AuditEvent> findByEventTimestampBetweenOrderByEventTimestampDesc(
+            LocalDateTime start,
+            LocalDateTime end
+    );
 }

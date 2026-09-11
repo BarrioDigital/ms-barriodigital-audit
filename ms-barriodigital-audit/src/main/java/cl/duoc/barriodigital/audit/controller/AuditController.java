@@ -5,6 +5,7 @@ import cl.duoc.barriodigital.audit.service.AuditService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import java.time.LocalDateTime;
 
 import java.util.List;
 
@@ -44,6 +45,16 @@ public class AuditController {
 
         return ResponseEntity.ok(
                 service.findByEventType(eventType)
+        );
+    }
+
+   @GetMapping("/date")
+    public ResponseEntity<List<AuditEvent>> findByDateRange(
+            @RequestParam LocalDateTime start,
+            @RequestParam LocalDateTime end
+    ) {
+        return ResponseEntity.ok(
+                service.findByDateRange(start, end)
         );
     }
 }

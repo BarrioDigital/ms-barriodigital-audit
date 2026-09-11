@@ -6,7 +6,7 @@ import cl.duoc.barriodigital.audit.repository.AuditEventRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Service;
-
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
@@ -58,5 +58,12 @@ public void consume(RequestEventDTO event) {
 
     public List<AuditEvent> findByEventType(String eventType) {
         return repository.findByEventTypeOrderByEventTimestampDesc(eventType);
+    }
+    public List<AuditEvent> findByDateRange(
+        LocalDateTime start,
+        LocalDateTime end
+    ) {
+        return repository
+                .findByEventTimestampBetweenOrderByEventTimestampDesc(start, end);
     }
 }
