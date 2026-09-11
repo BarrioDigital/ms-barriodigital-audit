@@ -16,31 +16,32 @@ public class AuditService {
     private final AuditEventRepository repository;
 
     @KafkaListener(
-            topics = "requests.events",
-            groupId = "audit-service"
-    )
-    public void consume(RequestEventDTO event) {
+        topics = "requests.events",
+        groupId = "audit-service",
+        containerFactory = "kafkaListenerContainerFactory"
+)
+public void consume(RequestEventDTO event) {
 
-        if (event.getEventId() != null
-                && repository.existsByEventId(event.getEventId())) {
-            return;
-        }
+    if (event.getEventId() != null
+            && repository.existsByEventId(event.getEventId())) {
+        return;
+    }
 
-        AuditEvent auditEvent = AuditEvent.builder()
-                .eventId(event.getEventId())
-                .requestId(event.getRequestId())
-                .eventType(event.getType())
-                .userId(event.getUserId())
-                .userRole(event.getUserRole())
-                .oldStatus(event.getOldStatus())
-                .newStatus(event.getNewStatus())
-                .eventTimestamp(event.getTimestamp())
-                .traceId(event.getTraceId())
-                .correlationId(event.getCorrelationId())
-                .details(event.getDetails())
-                .build();
+    AuditEvent auditEvent = AuditEvent.builder()
+            .eventId(event.getEventId())
+            .requestId(event.getRequestId())
+            .eventType(event.getType())
+            .userId(event.getUserId())
+            .userRole(event.getUserRole())
+            .oldStatus(event.getOldStatus())
+            .newStatus(event.getNewStatus())
+            .eventTimestamp(event.getTimestamp())
+            .traceId(event.getTraceId())
+            .correlationId(event.getCorrelationId())
+            .details(event.getDetails())
+            .build();
 
-        repository.save(auditEvent);
+    repository.save(auditEvent);
     }
 
     public List<AuditEvent> findAll() {
