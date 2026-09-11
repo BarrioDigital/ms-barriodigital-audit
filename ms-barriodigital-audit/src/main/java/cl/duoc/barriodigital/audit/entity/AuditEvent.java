@@ -24,6 +24,9 @@ public class AuditEvent {
     @Column(name = "request_id")
     private Long requestId;
 
+    @Column(name = "procedure_id")
+    private Long procedureId;
+
     @Column(name = "event_type", nullable = false)
     private String eventType;
 
@@ -51,7 +54,7 @@ public class AuditEvent {
     @Column(name = "details", columnDefinition = "TEXT")
     private String details;
 
-    @Column(name = "created_at")
+    @Column(name = "created_at", nullable = false)
     private LocalDateTime createdAt;
 
     @PrePersist

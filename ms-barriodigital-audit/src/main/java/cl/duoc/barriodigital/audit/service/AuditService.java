@@ -6,6 +6,7 @@ import cl.duoc.barriodigital.audit.repository.AuditEventRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Service;
+
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -16,32 +17,38 @@ public class AuditService {
     private final AuditEventRepository repository;
 
     @KafkaListener(
-        topics = "requests.events",
-        groupId = "audit-service",
-        containerFactory = "kafkaListenerContainerFactory"
-)
-public void consume(RequestEventDTO event) {
+            topics = "requests.events",
+            groupId = "audit-service",
+            containerFactory = "kafkaListenerContainerFactory"
+    )
+    public void consume(RequestEventDTO event) {
 
-    if (event.getEventId() != null
-            && repository.existsByEventId(event.getEventId())) {
-        return;
-    }
+        String eventId =
+                "request-" + event.getRequestId()
+                        + "-" + event.getNewStatus()
+                        + "-" + event.getTimestamp();
 
-    AuditEvent auditEvent = AuditEvent.builder()
-            .eventId(event.getEventId())
-            .requestId(event.getRequestId())
-            .eventType(event.getType())
-            .userId(event.getUserId())
-            .userRole(event.getUserRole())
-            .oldStatus(event.getOldStatus())
-            .newStatus(event.getNewStatus())
-            .eventTimestamp(event.getTimestamp())
-            .traceId(event.getTraceId())
-            .correlationId(event.getCorrelationId())
-            .details(event.getDetails())
-            .build();
+        if (repository.existsByEventId(eventId)) {
+            return;
+        }
 
-    repository.save(auditEvent);
+        AuditEvent auditEvent = AuditEvent.builder()
+                .eventId(eventId)
+                .requestId(event.getRequestId())
+                .procedureId(event.getProcedureId())
+                .eventType("REQUEST_STATUS_CHANGED")
+                .oldStatus(event.getOldStatus())
+                .newStatus(event.getNewStatus())
+                .eventTimestamp(event.getTimestamp())
+                .details(
+                        "Cambio de estado de "
+                                + event.getOldStatus()
+                                + " a "
+                                + event.getNewStatus()
+                )
+                .build();
+
+        repository.save(auditEvent);
     }
 
     public List<AuditEvent> findAll() {
@@ -59,11 +66,15 @@ public void consume(RequestEventDTO event) {
     public List<AuditEvent> findByEventType(String eventType) {
         return repository.findByEventTypeOrderByEventTimestampDesc(eventType);
     }
+
     public List<AuditEvent> findByDateRange(
-        LocalDateTime start,
-        LocalDateTime end
+            LocalDateTime start,
+            LocalDateTime end
     ) {
         return repository
-                .findByEventTimestampBetweenOrderByEventTimestampDesc(start, end);
+                .findByEventTimestampBetweenOrderByEventTimestampDesc(
+                        start,
+                        end
+                );
     }
 }

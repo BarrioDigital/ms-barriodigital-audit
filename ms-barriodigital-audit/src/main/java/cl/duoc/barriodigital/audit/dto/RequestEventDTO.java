@@ -1,6 +1,10 @@
 package cl.duoc.barriodigital.audit.dto;
 
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import java.time.LocalDateTime;
 
@@ -11,25 +15,9 @@ import java.time.LocalDateTime;
 @Builder
 public class RequestEventDTO {
 
-    private String eventId;
-
-    private String type;
-
     private Long requestId;
-
-    private String userId;
-
-    private String userRole;
-
+    private Long procedureId;
     private String oldStatus;
-
     private String newStatus;
-
     private LocalDateTime timestamp;
-
-    private String traceId;
-
-    private String correlationId;
-
-    private String details;
 }
