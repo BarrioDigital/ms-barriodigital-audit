@@ -3,6 +3,7 @@ package cl.duoc.barriodigital.audit.entity;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.time.Instant;
 import java.time.LocalDateTime;
 
 @Entity
@@ -43,7 +44,7 @@ public class AuditEvent {
     private String newStatus;
 
     @Column(name = "event_timestamp", nullable = false)
-    private LocalDateTime eventTimestamp;
+    private Instant eventTimestamp; // <-- Cambiado de LocalDateTime a Instant
 
     @Column(name = "trace_id")
     private String traceId;

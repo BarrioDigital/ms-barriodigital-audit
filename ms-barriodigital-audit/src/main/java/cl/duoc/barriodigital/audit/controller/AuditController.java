@@ -5,8 +5,8 @@ import cl.duoc.barriodigital.audit.service.AuditService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import java.time.LocalDateTime;
 
+import java.time.Instant;
 import java.util.List;
 
 @RestController
@@ -48,10 +48,10 @@ public class AuditController {
         );
     }
 
-   @GetMapping("/date")
+    @GetMapping("/date")
     public ResponseEntity<List<AuditEvent>> findByDateRange(
-            @RequestParam LocalDateTime start,
-            @RequestParam LocalDateTime end
+            @RequestParam Instant start,
+            @RequestParam Instant end
     ) {
         return ResponseEntity.ok(
                 service.findByDateRange(start, end)
