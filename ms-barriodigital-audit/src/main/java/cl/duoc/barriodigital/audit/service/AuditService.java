@@ -7,7 +7,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDateTime;
+import java.time.Instant;
 import java.util.List;
 
 @Service
@@ -68,8 +68,8 @@ public class AuditService {
     }
 
     public List<AuditEvent> findByDateRange(
-            LocalDateTime start,
-            LocalDateTime end
+            Instant start,
+            Instant end
     ) {
         return repository
                 .findByEventTimestampBetweenOrderByEventTimestampDesc(
