@@ -1,13 +1,11 @@
 server:
   port: 8084
+  error:
+    include-message: always
 
 spring:
   application:
     name: ms-barriodigital-audit
-
-  web:
-    error:
-      include-message: always
 
   datasource:
     url: jdbc:postgresql://ep-shy-glade-acs6skul-pooler.sa-east-1.aws.neon.tech/neondb?sslmode=require&channel_binding=require
@@ -24,7 +22,7 @@ spring:
         dialect: org.hibernate.dialect.PostgreSQLDialect
 
   kafka:
-    bootstrap-servers: localhost:29092
+    bootstrap-servers: ${SPRING_KAFKA_BOOTSTRAP_SERVERS:kafka:9092}
     consumer:
       group-id: audit-group
       auto-offset-reset: earliest
@@ -32,3 +30,5 @@ spring:
       value-deserializer: org.springframework.kafka.support.serializer.JsonDeserializer
       properties:
         spring.json.trusted.packages: "*"
+        spring.json.value.default.type: "com.barriodigital.demo.dto.KafkaAuditEventDto"
+        spring.json.use.type.headers: false
