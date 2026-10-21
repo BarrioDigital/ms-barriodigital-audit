@@ -1,16 +1,18 @@
 server:
   port: 8084
-  error:
-    include-message: always
 
 spring:
   application:
     name: ms-barriodigital-audit
 
+  web:
+    error:
+      include-message: always
+
   datasource:
-    url: jdbc:postgresql://ep-wandering-bar-acik3s9y-pooler.sa-east-1.aws.neon.tech/neondb?sslmode=require&channel_binding=require
+    url: jdbc:postgresql://ep-shy-glade-acs6skul-pooler.sa-east-1.aws.neon.tech/neondb?sslmode=require&channel_binding=require
     username: neondb_owner
-    password: npg_rPx9j4viWscf
+    password: npg_Pmh8aYoxHne3
     driver-class-name: org.postgresql.Driver
 
   jpa:
